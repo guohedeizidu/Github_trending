@@ -71,23 +71,23 @@ export function DetailPage() {
         <Link to="/" className="text-sm text-blue-600 hover:underline flex items-center gap-1 mb-4">
           <ArrowLeft className="w-4 h-4" /> 返回
         </Link>
-        <div className="text-center text-gray-500 py-10">{repoError || '项目未找到'}</div>
+        <div className="text-center text-[var(--text-muted)] py-10">{repoError || '项目未找到'}</div>
       </div>
     );
   }
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-6">
-      <Link to="/" className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-900 mb-5">
+      <Link to="/" className="inline-flex items-center gap-1 text-sm text-[var(--text-muted)] hover:text-[var(--text-primary)] mb-5 transition-colors duration-200">
         <ArrowLeft className="w-4 h-4" /> 返回列表
       </Link>
 
       <div className="flex items-start gap-4 mb-5">
         <img src={repoData.owner?.avatar_url || `https://github.com/${owner}.png`} alt="" className="w-12 h-12 rounded-full shrink-0" />
         <div className="flex-1 min-w-0">
-          <h1 className="text-lg font-bold text-gray-900">{repoData.full_name}</h1>
-          <p className="text-sm text-gray-500 mt-0.5">{repoData.description}</p>
-          <div className="flex items-center gap-3 mt-2 text-xs text-gray-400">
+          <h1 className="text-lg font-bold text-[var(--text-primary)]">{repoData.full_name}</h1>
+          <p className="text-sm text-[var(--text-secondary)] mt-0.5">{repoData.description}</p>
+          <div className="flex items-center gap-3 mt-2 text-xs text-[var(--text-muted)]">
             {repoData.language && (
               <span className="flex items-center gap-1">
                 <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: LANGUAGE_COLORS[repoData.language] || '#ccc' }} />
@@ -114,7 +114,7 @@ export function DetailPage() {
                 });
               }
             }}
-            className={`flex items-center gap-1.5 px-4 py-2 text-xs font-medium rounded-lg shrink-0 border ${isFavorited ? 'bg-yellow-50 border-yellow-200 text-yellow-600' : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'}`}
+            className={`flex items-center gap-1.5 px-4 py-2 text-xs font-medium rounded-lg shrink-0 border transition-colors duration-200 ${isFavorited ? 'bg-yellow-500/10 border-yellow-500/30 text-yellow-500' : 'bg-[var(--bg-card)] border-[var(--border)] text-[var(--text-secondary)] hover:bg-[var(--bg-hover)]'}`}
           >
             <Star className={`w-3.5 h-3.5 ${isFavorited ? 'fill-yellow-400 text-yellow-400' : ''}`} />
             {isFavorited ? '已收藏' : '收藏'}
@@ -123,7 +123,7 @@ export function DetailPage() {
             href={repoData.html_url}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1.5 px-4 py-2 bg-gray-900 text-white text-xs font-medium rounded-lg hover:bg-gray-800 shrink-0"
+            className="flex items-center gap-1.5 px-4 py-2 bg-[var(--accent)] text-white text-xs font-medium rounded-lg hover:opacity-90 shrink-0 transition-opacity duration-200"
           >
             <ExternalLink className="w-3.5 h-3.5" />
             GitHub
@@ -134,25 +134,25 @@ export function DetailPage() {
       {repoData.topics && repoData.topics.length > 0 && (
         <div className="flex flex-wrap gap-1.5 mb-5">
           {repoData.topics.slice(0, 10).map((t) => (
-            <span key={t} className="px-2 py-0.5 text-[11px] bg-blue-50 text-blue-600 rounded-md">{t}</span>
+            <span key={t} className="px-2 py-0.5 text-[11px] bg-[var(--accent-soft)] text-[var(--accent)] rounded-md">{t}</span>
           ))}
         </div>
       )}
 
       {translating && (
-        <div className="flex items-center gap-2 py-10 justify-center text-gray-500">
+        <div className="flex items-center gap-2 py-10 justify-center text-[var(--text-muted)]">
           <Loader2 className="w-4 h-4 animate-spin" />
           <span className="text-sm">AI 翻译中...</span>
         </div>
       )}
 
-      {transError && <div className="p-3 bg-red-50 text-red-700 text-sm rounded-lg mb-4">{transError}</div>}
+      {transError && <div className="p-3 bg-red-500/10 text-red-400 text-sm rounded-lg mb-4">{transError}</div>}
 
       {result && !translating && (
         <div className="flex justify-end mb-2">
           <button
             onClick={retranslate}
-            className="text-xs text-gray-400 hover:text-blue-600 transition-colors"
+            className="text-xs text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors duration-200"
           >
             重新翻译
           </button>
@@ -162,23 +162,23 @@ export function DetailPage() {
       {result && (
         <div className="space-y-4">
           {result.overview && (
-            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-5 border border-blue-100">
-              <h2 className="text-sm font-semibold text-blue-900 mb-2 flex items-center gap-1.5">
-                <Sparkles className="w-4 h-4 text-blue-500" />项目简介
+            <div className="bg-[var(--accent-soft)] rounded-xl p-5 border border-[var(--accent)]/20">
+              <h2 className="text-sm font-semibold text-[var(--text-primary)] mb-2 flex items-center gap-1.5">
+                <Sparkles className="w-4 h-4 text-[var(--accent)]" />项目简介
               </h2>
-              <p className="text-sm text-gray-700 leading-relaxed">{result.overview}</p>
+              <p className="text-sm text-[var(--text-secondary)] leading-relaxed">{result.overview}</p>
             </div>
           )}
 
           {result.highlights && (result.highlights).split('\n').filter(Boolean).length > 0 && (
-            <div className="bg-white rounded-xl p-5 border border-gray-200">
-              <h2 className="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-1.5">
+            <div className="bg-[var(--bg-card)] rounded-xl p-5 border border-[var(--border)]">
+              <h2 className="text-sm font-semibold text-[var(--text-primary)] mb-3 flex items-center gap-1.5">
                 <Star className="w-4 h-4 text-yellow-500" />核心亮点
               </h2>
               <div className="space-y-2">
                 {result.highlights.split('\n').filter(Boolean).map((line, i) => (
-                  <div key={i} className="flex items-start gap-2 text-sm text-gray-600">
-                    <span className="text-blue-500 mt-0.5 shrink-0">•</span>
+                  <div key={i} className="flex items-start gap-2 text-sm text-[var(--text-secondary)]">
+                    <span className="text-[var(--accent)] mt-0.5 shrink-0">•</span>
                     <span className="leading-relaxed">{line.replace(/^[•·\-]\s*/, '')}</span>
                   </div>
                 ))}
@@ -187,47 +187,47 @@ export function DetailPage() {
           )}
 
           {result.target && (
-            <div className="bg-white rounded-xl p-5 border border-gray-200">
-              <h2 className="text-sm font-semibold text-gray-900 mb-2 flex items-center gap-1.5">
+            <div className="bg-[var(--bg-card)] rounded-xl p-5 border border-[var(--border)]">
+              <h2 className="text-sm font-semibold text-[var(--text-primary)] mb-2 flex items-center gap-1.5">
                 <Target className="w-4 h-4 text-green-500" />项目目标
               </h2>
-              <p className="text-sm text-gray-600 whitespace-pre-wrap leading-relaxed">{result.target}</p>
+              <p className="text-sm text-[var(--text-secondary)] whitespace-pre-wrap leading-relaxed">{result.target}</p>
             </div>
           )}
 
           {result.usage && (
-            <div className="bg-white rounded-xl p-5 border border-gray-200">
-              <h2 className="text-sm font-semibold text-gray-900 mb-2 flex items-center gap-1.5">
+            <div className="bg-[var(--bg-card)] rounded-xl p-5 border border-[var(--border)]">
+              <h2 className="text-sm font-semibold text-[var(--text-primary)] mb-2 flex items-center gap-1.5">
                 <Rocket className="w-4 h-4 text-orange-500" />快速上手
               </h2>
-              <div className="text-sm text-gray-600 leading-relaxed whitespace-pre-wrap font-mono bg-gray-50 rounded-lg p-3">{result.usage}</div>
+              <div className="text-sm text-[var(--text-secondary)] leading-relaxed whitespace-pre-wrap font-mono bg-[var(--bg-primary)] rounded-lg p-3">{result.usage}</div>
             </div>
           )}
 
           {result.techStack && (
-            <div className="bg-white rounded-xl p-5 border border-gray-200">
-              <h2 className="text-sm font-semibold text-gray-900 mb-2 flex items-center gap-1.5">
+            <div className="bg-[var(--bg-card)] rounded-xl p-5 border border-[var(--border)]">
+              <h2 className="text-sm font-semibold text-[var(--text-primary)] mb-2 flex items-center gap-1.5">
                 <Layers className="w-4 h-4 text-purple-500" />技术架构
               </h2>
-              <p className="text-sm text-gray-600 whitespace-pre-wrap leading-relaxed">{result.techStack}</p>
+              <p className="text-sm text-[var(--text-secondary)] whitespace-pre-wrap leading-relaxed">{result.techStack}</p>
             </div>
           )}
 
           {result.installation && (
-            <div className="bg-white rounded-xl p-5 border border-gray-200">
-              <h2 className="text-sm font-semibold text-gray-900 mb-2 flex items-center gap-1.5">
+            <div className="bg-[var(--bg-card)] rounded-xl p-5 border border-[var(--border)]">
+              <h2 className="text-sm font-semibold text-[var(--text-primary)] mb-2 flex items-center gap-1.5">
                 <Download className="w-4 h-4 text-teal-500" />安装部署
               </h2>
-              <div className="text-sm text-gray-600 leading-relaxed whitespace-pre-wrap font-mono bg-gray-50 rounded-lg p-3">{result.installation}</div>
+              <div className="text-sm text-[var(--text-secondary)] leading-relaxed whitespace-pre-wrap font-mono bg-[var(--bg-primary)] rounded-lg p-3">{result.installation}</div>
             </div>
           )}
         </div>
       )}
 
       {!result && !translating && !transError && readme && (
-        <div className="bg-white rounded-xl p-5 border border-gray-200">
-          <h2 className="text-sm font-semibold text-gray-900 mb-3">README</h2>
-          <pre className="whitespace-pre-wrap text-xs text-gray-600 leading-relaxed">{readme.slice(0, 5000)}</pre>
+        <div className="bg-[var(--bg-card)] rounded-xl p-5 border border-[var(--border)]">
+          <h2 className="text-sm font-semibold text-[var(--text-primary)] mb-3">README</h2>
+          <pre className="whitespace-pre-wrap text-xs text-[var(--text-secondary)] leading-relaxed">{readme.slice(0, 5000)}</pre>
         </div>
       )}
     </div>

@@ -1,10 +1,52 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@font-face {
+  font-family: 'Inter';
+  src: url('https://fonts.googleapis.com/css2?family=Inter:wght@300..700&display=swap');
+}
+
+:root {
+  --bg-primary: #fafafa;
+  --bg-card: #ffffff;
+  --bg-hover: #f3f4f6;
+  --text-primary: #111111;
+  --text-secondary: #555555;
+  --text-muted: #9ca3af;
+  --border: #e5e7eb;
+  --accent: #2563eb;
+  --accent-soft: #eff6ff;
+}
+
+.dark {
+  --bg-primary: #0a0a0f;
+  --bg-card: #12121a;
+  --bg-hover: #1a1a24;
+  --text-primary: #f5f5f7;
+  --text-secondary: #a0a0b0;
+  --text-muted: #6b6b7b;
+  --border: rgba(255, 255, 255, 0.08);
+  --accent: #7c5cfc;
+  --accent-soft: rgba(124, 92, 252, 0.1);
+}
 
 body {
   margin: 0;
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 #root {
   min-height: 100vh;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out;
 }

@@ -54,9 +54,9 @@ export function ProjectCard({ repo }: Props) {
   return (
     <Link
       to={`/detail/${repo.owner}/${repo.name}`}
-      className="flex items-center gap-3 py-3 px-2 hover:bg-gray-50 transition-colors rounded-lg no-underline group"
+      className="flex items-center gap-3 py-3 px-3 hover:bg-[var(--bg-hover)] transition-all duration-200 rounded-lg no-underline group hover:-translate-y-[1px]"
     >
-      <span className="w-7 text-center text-xs font-mono text-gray-300 shrink-0">
+      <span className="w-7 text-center text-xs font-mono text-[var(--text-muted)] shrink-0">
         {repo.rank}
       </span>
 
@@ -68,14 +68,14 @@ export function ProjectCard({ repo }: Props) {
 
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-1">
-          <span className="text-xs text-gray-400">{repo.owner}</span>
-          <span className="text-gray-300">/</span>
-          <span className="font-semibold text-sm text-gray-900 truncate group-hover:text-blue-600 transition-colors">
+          <span className="text-xs text-[var(--text-muted)]">{repo.owner}</span>
+          <span className="text-[var(--text-muted)]">/</span>
+          <span className="font-semibold text-sm text-[var(--text-primary)] truncate group-hover:text-[var(--accent)] transition-colors duration-200">
             {repo.name}
           </span>
         </div>
-        <p className="text-xs text-gray-500 mt-0.5 truncate">{repo.description || '暂无描述'}</p>
-        <div className="flex items-center gap-3 mt-1 text-[11px] text-gray-400">
+        <p className="text-xs text-[var(--text-secondary)] mt-0.5 truncate">{repo.description || '暂无描述'}</p>
+        <div className="flex items-center gap-3 mt-1 text-[11px] text-[var(--text-muted)]">
           {repo.language && (
             <span className="flex items-center gap-1">
               <span
@@ -99,21 +99,21 @@ export function ProjectCard({ repo }: Props) {
       <div className="relative shrink-0" ref={pickerRef}>
         <button
           onClick={handleStarClick}
-          className="p-1.5 rounded-md hover:bg-gray-100 transition-colors"
+          className="p-1.5 rounded-md hover:bg-[var(--bg-hover)] transition-colors duration-200"
           aria-label={isFavorited ? '取消收藏' : '收藏'}
         >
-          <Star className={`w-4 h-4 ${isFavorited ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`} />
+          <Star className={`w-4 h-4 ${isFavorited ? 'fill-yellow-400 text-yellow-400' : 'text-[var(--text-muted)]'}`} />
         </button>
         {showPicker && (
           <div
-            className="absolute right-0 top-8 z-20 bg-white border border-gray-200 rounded-lg shadow-lg py-1 min-w-[100px]"
+            className="absolute right-0 top-8 z-20 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg shadow-lg py-1 min-w-[100px]"
             onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
           >
             {groups.map((g) => (
               <button
                 key={g.id}
                 onClick={(e) => handlePickGroup(e, g.id)}
-                className="block w-full text-left px-3 py-1.5 text-xs text-gray-700 hover:bg-gray-50"
+                className="block w-full text-left px-3 py-1.5 text-xs text-[var(--text-secondary)] hover:bg-[var(--bg-hover)]"
               >
                 {g.name}
               </button>
@@ -123,10 +123,10 @@ export function ProjectCard({ repo }: Props) {
       </div>
 
       <div className="shrink-0 text-right">
-        <span className="text-sm font-mono font-bold text-blue-600">
+        <span className="text-sm font-mono font-bold text-emerald-500 dark:text-emerald-400">
           +{repo.starsToday.toLocaleString()}
         </span>
-        <p className="text-[10px] text-gray-400 mt-0.5">{growthLabel}</p>
+        <p className="text-[10px] text-[var(--text-muted)] mt-0.5">{growthLabel}</p>
       </div>
     </Link>
   );

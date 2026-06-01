@@ -7,11 +7,15 @@ export interface AIConfig {
   model: string;
 }
 
+export type Theme = 'light' | 'dark' | 'system';
+
 interface SettingsState {
   githubToken: string;
   aiConfig: AIConfig;
+  theme: Theme;
   setGithubToken: (token: string) => void;
   setAIConfig: (config: AIConfig) => void;
+  setTheme: (theme: Theme) => void;
 }
 
 export const useSettingsStore = create<SettingsState>()(
@@ -23,8 +27,10 @@ export const useSettingsStore = create<SettingsState>()(
         apiKey: '',
         model: 'gpt-4o-mini',
       },
+      theme: 'system',
       setGithubToken: (token) => set({ githubToken: token }),
       setAIConfig: (config) => set({ aiConfig: config }),
+      setTheme: (theme) => set({ theme }),
     }),
     { name: 'github-trending-settings' }
   )

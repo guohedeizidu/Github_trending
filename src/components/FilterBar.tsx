@@ -14,10 +14,10 @@ export function FilterBar() {
             <button
               key={r.key}
               onClick={() => setTimeRange(r.key as TimeRange)}
-              className={`px-3 py-1.5 text-xs md:text-sm font-medium rounded-md transition-all ${
+              className={`px-3 py-1.5 text-xs md:text-sm font-medium rounded-md transition-all duration-200 ${
                 filter.timeRange === r.key
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+                  ? 'bg-[var(--accent)] text-white'
+                  : 'bg-[var(--bg-hover)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
               }`}
             >
               {r.label}
@@ -29,7 +29,7 @@ export function FilterBar() {
           <select
             value={filter.language}
             onChange={(e) => setLanguage(e.target.value)}
-            className="px-2.5 py-1.5 text-xs border border-gray-200 rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-2.5 py-1.5 text-xs border border-[var(--border)] rounded-md bg-[var(--bg-card)] text-[var(--text-secondary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] transition-colors duration-200"
           >
             {LANGUAGES.map((lang) => (
               <option key={lang} value={lang}>{lang}</option>
@@ -37,13 +37,13 @@ export function FilterBar() {
           </select>
 
           <div className="relative">
-            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
+            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[var(--text-muted)]" />
             <input
               type="text"
               value={filter.query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="搜索..."
-              className="w-36 md:w-48 pl-8 pr-3 py-1.5 text-xs border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-36 md:w-48 pl-8 pr-3 py-1.5 text-xs border border-[var(--border)] rounded-md bg-[var(--bg-card)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] transition-colors duration-200"
             />
           </div>
         </div>
@@ -54,10 +54,10 @@ export function FilterBar() {
           <button
             key={cat.key}
             onClick={() => setCategory(cat.key as Category)}
-            className={`px-3 py-1.5 text-xs font-semibold whitespace-nowrap rounded-md transition-all ${
+            className={`px-3 py-1.5 text-xs font-semibold whitespace-nowrap rounded-md transition-all duration-200 ${
               filter.category === cat.key
-                ? 'bg-gray-900 text-white'
-                : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+                ? 'bg-[var(--accent)] text-white'
+                : 'bg-[var(--bg-hover)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
             }`}
           >
             {cat.label}
