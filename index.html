@@ -5,6 +5,15 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>GitHub Trending - 开源项目趋势排行榜</title>
+    <script>
+      (function() {
+        var s = localStorage.getItem('github-trending-settings');
+        var theme = 'system';
+        try { if (s) theme = JSON.parse(s).state.theme || 'system'; } catch(e) {}
+        var dark = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        if (dark) document.documentElement.classList.add('dark');
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

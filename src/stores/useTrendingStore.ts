@@ -7,6 +7,8 @@ interface TrendingState {
   loading: boolean;
   error: string | null;
   filter: Filter;
+  page: number;
+  pageSize: number;
   setRepos: (repos: Repository[]) => void;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
@@ -14,6 +16,7 @@ interface TrendingState {
   setLanguage: (lang: string) => void;
   setCategory: (cat: Category) => void;
   setQuery: (query: string) => void;
+  setPage: (page: number) => void;
   applyFilters: () => void;
 }
 
@@ -41,6 +44,8 @@ export const useTrendingStore = create<TrendingState>((set, get) => ({
   loading: false,
   error: null,
   filter: { timeRange: 'weekly', language: '全部', category: 'all', query: '' },
+  page: 1,
+  pageSize: 20,
   setRepos: (repos) => {
     set({ repos });
     get().applyFilters();
@@ -48,19 +53,20 @@ export const useTrendingStore = create<TrendingState>((set, get) => ({
   setLoading: (loading) => set({ loading }),
   setError: (error) => set({ error }),
   setTimeRange: (range) => {
-    set((s) => ({ filter: { ...s.filter, timeRange: range } }));
+    set((s) => ({ filter: { ...s.filter, timeRange: range }, page: 1 }));
   },
   setLanguage: (lang) => {
-    set((s) => ({ filter: { ...s.filter, language: lang } }));
+    set((s) => ({ filter: { ...s.filter, language: lang }, page: 1 }));
   },
   setCategory: (cat) => {
-    set((s) => ({ filter: { ...s.filter, category: cat } }));
+    set((s) => ({ filter: { ...s.filter, category: cat }, page: 1 }));
     get().applyFilters();
   },
   setQuery: (query) => {
-    set((s) => ({ filter: { ...s.filter, query } }));
+    set((s) => ({ filter: { ...s.filter, query }, page: 1 }));
     get().applyFilters();
   },
+  setPage: (page) => set({ page }),
   applyFilters: () => {
     const { repos, filter } = get();
     let result = repos;
@@ -76,6 +82,10 @@ export const useTrendingStore = create<TrendingState>((set, get) => ({
           r.description.toLowerCase().includes(q)
       );
     }
+    const growthKey = filter.timeRange === 'daily' ? 'starsToday'
+      : filter.timeRange === 'weekly' ? 'starsThisWeek' : 'starsThisMonth';
+    result = [...result].sort((a, b) => b[growthKey] - a[growthKey]);
+    result = result.map((r, i) => ({ ...r, rank: i + 1 }));
     set({ filteredRepos: result });
   },
 }));

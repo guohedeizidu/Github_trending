@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Star, GitFork } from 'lucide-react';
+import { Star, GitFork, Trophy } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import type { Repository } from '../types';
 import { useTrendingStore } from '../stores/useTrendingStore';
@@ -56,8 +56,11 @@ export function ProjectCard({ repo }: Props) {
       to={`/detail/${repo.owner}/${repo.name}`}
       className="flex items-center gap-3 py-3 px-3 hover:bg-[var(--bg-hover)] transition-all duration-200 rounded-lg no-underline group hover:-translate-y-[1px]"
     >
-      <span className="w-7 text-center text-xs font-mono text-[var(--text-muted)] shrink-0">
-        {repo.rank}
+      <span className="w-7 text-center shrink-0 flex items-center justify-center">
+        {repo.rank === 1 && <Trophy className="w-4 h-4 text-yellow-500" />}
+        {repo.rank === 2 && <Trophy className="w-4 h-4 text-gray-400" />}
+        {repo.rank === 3 && <Trophy className="w-4 h-4 text-amber-600" />}
+        {repo.rank > 3 && <span className="text-xs font-mono text-[var(--text-muted)]">{repo.rank}</span>}
       </span>
 
       <img

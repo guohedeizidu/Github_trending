@@ -1,12 +1,19 @@
+import { useMemo } from 'react';
 import { useTrendingStore } from '../stores/useTrendingStore';
 import { useTrending } from '../hooks/useTrending';
 import { FilterBar } from '../components/FilterBar';
 import { ProjectCard } from '../components/ProjectCard';
-import { Loader2, TrendingUp } from 'lucide-react';
+import { Loader2, TrendingUp, ChevronLeft, ChevronRight } from 'lucide-react';
 
 export function HomePage() {
-  const { filteredRepos, loading, error } = useTrendingStore();
+  const { filteredRepos, loading, error, page, pageSize, setPage } = useTrendingStore();
   useTrending();
+
+  const totalPages = Math.ceil(filteredRepos.length / pageSize);
+  const paginatedRepos = useMemo(
+    () => filteredRepos.slice((page - 1) * pageSize, page * pageSize),
+    [filteredRepos, page, pageSize]
+  );
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-6">
@@ -30,14 +37,48 @@ export function HomePage() {
           <span className="ml-2 text-sm text-[var(--text-muted)]">加载中...</span>
         </div>
       ) : (
-        <div className="mt-4 divide-y divide-[var(--border)]">
-          {filteredRepos.map((repo) => (
-            <ProjectCard key={`${repo.fullName}-${repo.rank}`} repo={repo} />
-          ))}
-          {filteredRepos.length === 0 && !error && (
-            <p className="text-center text-[var(--text-muted)] py-16 text-sm">暂无数据</p>
+        <>
+          <div className="mt-4 divide-y divide-[var(--border)]">
+            {paginatedRepos.map((repo) => (
+              <ProjectCard key={`${repo.fullName}-${repo.rank}`} repo={repo} />
+            ))}
+            {filteredRepos.length === 0 && !error && (
+              <p className="text-center text-[var(--text-muted)] py-16 text-sm">暂无数据</p>
+            )}
+          </div>
+
+          {totalPages > 1 && (
+            <div className="flex items-center justify-center gap-2 mt-6 pb-4">
+              <button
+                onClick={() => setPage(page - 1)}
+                disabled={page <= 1}
+                className="p-1.5 rounded-md border border-[var(--border)] text-[var(--text-secondary)] hover:bg-[var(--bg-hover)] disabled:opacity-30 disabled:cursor-not-allowed transition-colors duration-200"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+                <button
+                  key={p}
+                  onClick={() => setPage(p)}
+                  className={`w-8 h-8 text-xs font-medium rounded-md transition-colors duration-200 ${
+                    p === page
+                      ? 'bg-[var(--accent)] text-white'
+                      : 'text-[var(--text-secondary)] hover:bg-[var(--bg-hover)]'
+                  }`}
+                >
+                  {p}
+                </button>
+              ))}
+              <button
+                onClick={() => setPage(page + 1)}
+                disabled={page >= totalPages}
+                className="p-1.5 rounded-md border border-[var(--border)] text-[var(--text-secondary)] hover:bg-[var(--bg-hover)] disabled:opacity-30 disabled:cursor-not-allowed transition-colors duration-200"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
           )}
-        </div>
+        </>
       )}
     </div>
   );
