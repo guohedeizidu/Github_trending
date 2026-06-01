@@ -25,7 +25,7 @@ export function DetailPage() {
   const [loadingRepo, setLoadingRepo] = useState(true);
   const [repoError, setRepoError] = useState<string | null>(null);
   const githubToken = useSettingsStore((s) => s.githubToken);
-  const { result, loading: translating, error: transError, translate } = useTranslation(owner!, repo!);
+  const { result, loading: translating, error: transError, translate, retranslate } = useTranslation(owner!, repo!);
   const addHistory = useFavoritesStore((s) => s.addHistory);
   const isFavorited = useFavoritesStore((s) => s.favorites.some((f) => f.repo.fullName === `${owner}/${repo}`));
   const addFavorite = useFavoritesStore((s) => s.addFavorite);
@@ -148,56 +148,79 @@ export function DetailPage() {
 
       {transError && <div className="p-3 bg-red-50 text-red-700 text-sm rounded-lg mb-4">{transError}</div>}
 
+      {result && !translating && (
+        <div className="flex justify-end mb-2">
+          <button
+            onClick={retranslate}
+            className="text-xs text-gray-400 hover:text-blue-600 transition-colors"
+          >
+            重新翻译
+          </button>
+        </div>
+      )}
+
       {result && (
         <div className="space-y-4">
-          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-5 border border-blue-100">
-            <h2 className="text-sm font-semibold text-blue-900 mb-2 flex items-center gap-1.5">
-              <Sparkles className="w-4 h-4 text-blue-500" />项目简介
-            </h2>
-            <p className="text-sm text-gray-700 leading-relaxed">{result.overview}</p>
-          </div>
-
-          <div className="bg-white rounded-xl p-5 border border-gray-200">
-            <h2 className="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-1.5">
-              <Star className="w-4 h-4 text-yellow-500" />核心亮点
-            </h2>
-            <div className="space-y-2">
-              {(result.highlights || '').split('\n').filter(Boolean).map((line, i) => (
-                <div key={i} className="flex items-start gap-2 text-sm text-gray-600">
-                  <span className="text-blue-500 mt-0.5 shrink-0">•</span>
-                  <span className="leading-relaxed">{line.replace(/^[•·\-]\s*/, '')}</span>
-                </div>
-              ))}
+          {result.overview && (
+            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-5 border border-blue-100">
+              <h2 className="text-sm font-semibold text-blue-900 mb-2 flex items-center gap-1.5">
+                <Sparkles className="w-4 h-4 text-blue-500" />项目简介
+              </h2>
+              <p className="text-sm text-gray-700 leading-relaxed">{result.overview}</p>
             </div>
-          </div>
+          )}
 
-          <div className="bg-white rounded-xl p-5 border border-gray-200">
-            <h2 className="text-sm font-semibold text-gray-900 mb-2 flex items-center gap-1.5">
-              <Target className="w-4 h-4 text-green-500" />项目目标
-            </h2>
-            <p className="text-sm text-gray-600 whitespace-pre-wrap leading-relaxed">{result.target || ''}</p>
-          </div>
+          {result.highlights && (result.highlights).split('\n').filter(Boolean).length > 0 && (
+            <div className="bg-white rounded-xl p-5 border border-gray-200">
+              <h2 className="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-1.5">
+                <Star className="w-4 h-4 text-yellow-500" />核心亮点
+              </h2>
+              <div className="space-y-2">
+                {result.highlights.split('\n').filter(Boolean).map((line, i) => (
+                  <div key={i} className="flex items-start gap-2 text-sm text-gray-600">
+                    <span className="text-blue-500 mt-0.5 shrink-0">•</span>
+                    <span className="leading-relaxed">{line.replace(/^[•·\-]\s*/, '')}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
-          <div className="bg-white rounded-xl p-5 border border-gray-200">
-            <h2 className="text-sm font-semibold text-gray-900 mb-2 flex items-center gap-1.5">
-              <Rocket className="w-4 h-4 text-orange-500" />快速上手
-            </h2>
-            <div className="text-sm text-gray-600 leading-relaxed whitespace-pre-wrap font-mono bg-gray-50 rounded-lg p-3">{result.usage || ''}</div>
-          </div>
+          {result.target && (
+            <div className="bg-white rounded-xl p-5 border border-gray-200">
+              <h2 className="text-sm font-semibold text-gray-900 mb-2 flex items-center gap-1.5">
+                <Target className="w-4 h-4 text-green-500" />项目目标
+              </h2>
+              <p className="text-sm text-gray-600 whitespace-pre-wrap leading-relaxed">{result.target}</p>
+            </div>
+          )}
 
-          <div className="bg-white rounded-xl p-5 border border-gray-200">
-            <h2 className="text-sm font-semibold text-gray-900 mb-2 flex items-center gap-1.5">
-              <Layers className="w-4 h-4 text-purple-500" />技术架构
-            </h2>
-            <p className="text-sm text-gray-600 whitespace-pre-wrap leading-relaxed">{result.techStack || ''}</p>
-          </div>
+          {result.usage && (
+            <div className="bg-white rounded-xl p-5 border border-gray-200">
+              <h2 className="text-sm font-semibold text-gray-900 mb-2 flex items-center gap-1.5">
+                <Rocket className="w-4 h-4 text-orange-500" />快速上手
+              </h2>
+              <div className="text-sm text-gray-600 leading-relaxed whitespace-pre-wrap font-mono bg-gray-50 rounded-lg p-3">{result.usage}</div>
+            </div>
+          )}
 
-          <div className="bg-white rounded-xl p-5 border border-gray-200">
-            <h2 className="text-sm font-semibold text-gray-900 mb-2 flex items-center gap-1.5">
-              <Download className="w-4 h-4 text-teal-500" />安装部署
-            </h2>
-            <div className="text-sm text-gray-600 leading-relaxed whitespace-pre-wrap font-mono bg-gray-50 rounded-lg p-3">{result.installation || ''}</div>
-          </div>
+          {result.techStack && (
+            <div className="bg-white rounded-xl p-5 border border-gray-200">
+              <h2 className="text-sm font-semibold text-gray-900 mb-2 flex items-center gap-1.5">
+                <Layers className="w-4 h-4 text-purple-500" />技术架构
+              </h2>
+              <p className="text-sm text-gray-600 whitespace-pre-wrap leading-relaxed">{result.techStack}</p>
+            </div>
+          )}
+
+          {result.installation && (
+            <div className="bg-white rounded-xl p-5 border border-gray-200">
+              <h2 className="text-sm font-semibold text-gray-900 mb-2 flex items-center gap-1.5">
+                <Download className="w-4 h-4 text-teal-500" />安装部署
+              </h2>
+              <div className="text-sm text-gray-600 leading-relaxed whitespace-pre-wrap font-mono bg-gray-50 rounded-lg p-3">{result.installation}</div>
+            </div>
+          )}
         </div>
       )}
 
