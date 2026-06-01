@@ -38,6 +38,13 @@ function matchCategory(repo: Repository, category: Category): boolean {
   return keywords.some((kw) => text.includes(kw));
 }
 
+export function getRepoCategories(repo: Repository): string[] {
+  const text = `${repo.description} ${repo.name} ${repo.fullName}`.toLowerCase();
+  return Object.entries(CATEGORY_KEYWORDS)
+    .filter(([, keywords]) => keywords.some((kw) => text.includes(kw)))
+    .map(([key]) => key);
+}
+
 export const useTrendingStore = create<TrendingState>((set, get) => ({
   repos: [],
   filteredRepos: [],

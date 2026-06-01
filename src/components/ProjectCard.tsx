@@ -1,9 +1,10 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { Star, GitFork, Trophy } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import type { Repository } from '../types';
-import { useTrendingStore } from '../stores/useTrendingStore';
+import { useTrendingStore, getRepoCategories } from '../stores/useTrendingStore';
 import { useFavoritesStore } from '../stores/useFavoritesStore';
+import { LANGUAGE_COLORS, CATEGORY_LABELS } from '../utils/constants';
 
 interface Props {
   repo: Repository;
@@ -12,6 +13,7 @@ interface Props {
 export function ProjectCard({ repo }: Props) {
   const timeRange = useTrendingStore((s) => s.filter.timeRange);
   const growthLabel = timeRange === 'daily' ? '今日' : timeRange === 'weekly' ? '本周' : '本月';
+  const categories = useMemo(() => getRepoCategories(repo), [repo]);
   const isFavorited = useFavoritesStore((s) => s.favorites.some((f) => f.repo.fullName === repo.fullName));
   const addFavorite = useFavoritesStore((s) => s.addFavorite);
   const removeFavorite = useFavoritesStore((s) => s.removeFavorite);
@@ -78,16 +80,7 @@ export function ProjectCard({ repo }: Props) {
           </span>
         </div>
         <p className="text-xs text-[var(--text-secondary)] mt-0.5 truncate">{repo.description || '暂无描述'}</p>
-        <div className="flex items-center gap-3 mt-1 text-[11px] text-[var(--text-muted)]">
-          {repo.language && (
-            <span className="flex items-center gap-1">
-              <span
-                className="w-2 h-2 rounded-full shrink-0"
-                style={{ backgroundColor: repo.languageColor || '#ccc' }}
-              />
-              {repo.language}
-            </span>
-          )}
+        <div className="flex items-center gap-2 mt-1.5 flex-wrap text-[11px] text-[var(--text-muted)]">
           <span className="flex items-center gap-0.5">
             <Star className="w-3 h-3" />
             {formatNumber(repo.stars)}
@@ -96,6 +89,22 @@ export function ProjectCard({ repo }: Props) {
             <GitFork className="w-3 h-3" />
             {formatNumber(repo.forks)}
           </span>
+          {repo.language && (
+            <span
+              className="px-1.5 py-0.5 text-[10px] font-medium rounded"
+              style={{
+                backgroundColor: `${LANGUAGE_COLORS[repo.language] || '#ccc'}20`,
+                color: LANGUAGE_COLORS[repo.language] || '#999',
+              }}
+            >
+              {repo.language}
+            </span>
+          )}
+          {categories.map((cat) => (
+            <span key={cat} className="px-1.5 py-0.5 text-[10px] font-medium rounded bg-[var(--accent-soft)] text-[var(--accent)]">
+              {CATEGORY_LABELS[cat] || cat}
+            </span>
+          ))}
         </div>
       </div>
 

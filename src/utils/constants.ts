@@ -56,3 +56,8 @@ export const LANGUAGE_COLORS: Record<string, string> = {
   Shell: '#89e051',
   Vue: '#41b883',
 };
+
+export const CATEGORY_LABELS: Record<string, string> = {
+  ai: 'AI', mcp: 'MCP', agents: 'Agents', coding: 'Coding',
+  automation: 'Automation', devtools: 'DevTools', chatbot: 'Chatbot', rag: 'RAG',
+};
