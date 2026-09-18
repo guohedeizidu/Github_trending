@@ -77,6 +77,8 @@ Or start both at once:
 npm start
 ```
 
+The frontend defaults to `VITE_API_BASE=http://localhost:3001`; set that variable if your backend listens on another port.
+
 ### Configuration
 
 Click the **Settings** (gear icon) in the app to configure:
